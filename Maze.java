@@ -5,6 +5,7 @@ public class Maze{
   private char[][]maze;
   private boolean animate;//false by default
 
+
   /*Constructor loads a maze text file, and sets animate to false by default.
 
   1. The file contains a rectangular ascii maze, made with the following 4 characters:
@@ -19,9 +20,17 @@ public class Maze{
   throw a FileNotFoundException or IllegalStateException
   */
   public Maze(String filename) throws FileNotFoundException{
+    int rows = 1;
     animate = false;
     File text = new File(filename);
     Scanner in = new Scanner(text);
+    String n = in.nextLine();
+    int cols = n.length();
+    while(in.hasNextLine()){
+      rows++;
+      n = in.nextLine();
+    }
+    maze = new char[rows][cols];
     for(int r = 0; r < maze.length; r++){
       String line = in.nextLine();
       for(int c = 0; c < line.length(); c++){
@@ -53,6 +62,7 @@ public class Maze{
   Since the constructor exits when the file is not found or is missing an E or S, we can assume it exists.
   */
   public int solve(){
+
     //find the location of the S.
 
     //erase the S
@@ -85,6 +95,17 @@ public class Maze{
 
     //COMPLETE SOLVE
     return -1; //so it compiles
+  }
+
+  public String toString(){
+    String ans = "";
+    for(int r = 0; r < maze.length; r++){
+      for(int c = 0; c < maze[r].length; c++){
+        ans+=maze[r][c];
+      }
+      ans+="\n";
+    }
+    return ans;
   }
 
 }
