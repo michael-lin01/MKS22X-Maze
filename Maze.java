@@ -77,14 +77,8 @@ public class Maze{
   Since the constructor exits when the file is not found or is missing an E or S, we can assume it exists.
   */
   public int solve(){
-
-    //find the location of the S.
-
-    //erase the S
-
-    //and start solving at the location of the s.
-    //return solve(???,???);
-    return 1;
+    maze[startR][startC] = '@';
+    return solve(startR, startC, 0);
   }
 
   /*
@@ -100,17 +94,49 @@ public class Maze{
   All visited spots that were not part of the solution are changed to '.'
   All visited spots that are part of the solution are changed to '@'
   */
-  private int solve(int row, int col){ //you can add more parameters since this is private
+  private int solve(int row, int col, int steps){ //you can add more parameters since this is private
 
     //automatic animation! You are welcome.
     if(animate){
       clearTerminal();
       System.out.println(this);
-      wait(20);
+      wait(200);
     }
-
-    //COMPLETE SOLVE
-    return -1; //so it compiles
+    if(maze[row][col]=='E') return steps+1;
+    //up,right,down,left
+    if(maze[row-1][col]==' ') {
+      maze[row-1][col] = '@';
+      int ans = solve(row-1, col, steps++);
+      if (ans != -1) return ans;
+      else{
+        maze[row-1][col] = '.';
+      }
+    }
+    if(maze[row][col+1]==' ') {
+      maze[row][col+1] = '@';
+      int ans = solve(row, col+1, steps++);
+      if (ans != -1) return ans;
+      else{
+        maze[row][col+1] = '.';
+      }
+    }
+    if(maze[row+1][col]==' ') {
+      maze[row+1][col] = '@';
+      int ans = solve(row+1, col, steps++);
+      if (ans != -1) return ans;
+      else{
+        maze[row+1][col] = '.';
+      }
+    }
+    if(maze[row][col-1]==' ') {
+      maze[row][col-1] = '@';
+      int ans = solve(row, col-1, steps++);
+      if (ans != -1) return ans;
+      else{
+        maze[row][col-1] = '.';
+      }
+    }
+    return -1;
   }
 
   public String toString(){
@@ -127,6 +153,8 @@ public class Maze{
   public static void main(String args[]){
     try{
       Maze m = new Maze("data1.dat");
+      m.setAnimate(true);
+      m.solve();
       System.out.println(m);
     }
     catch(FileNotFoundException e){
