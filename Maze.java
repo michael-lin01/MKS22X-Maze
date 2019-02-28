@@ -4,6 +4,8 @@ public class Maze{
 
   private char[][]maze;
   private boolean animate;//false by default
+  private int startR;
+  private int startC;
 
 
   /*Constructor loads a maze text file, and sets animate to false by default.
@@ -22,21 +24,34 @@ public class Maze{
   public Maze(String filename) throws FileNotFoundException{
     int rows = 1;
     animate = false;
+    boolean hasStart = false;
+    boolean hasEnd = false;
+
     File text = new File(filename);
     Scanner in = new Scanner(text);
     String n = in.nextLine();
     int cols = n.length();
     while(in.hasNextLine()){
       rows++;
-      n = in.nextLine();
+      in.nextLine();
     }
+
+    in = new Scanner(text);
     maze = new char[rows][cols];
     for(int r = 0; r < maze.length; r++){
       String line = in.nextLine();
       for(int c = 0; c < line.length(); c++){
+        if(line.charAt(c)=='S') {
+          startR = r;
+          startC = c;
+          hasStart = true;
+        }
+        if(line.charAt(c)=='E') hasEnd = true;
         maze[r][c]=line.charAt(c);
       }
     }
+    if(!hasStart || !hasEnd) throw new IllegalStateException();
+
   }
 
   private void wait(int millis){
@@ -69,6 +84,7 @@ public class Maze{
 
     //and start solving at the location of the s.
     //return solve(???,???);
+    return 1;
   }
 
   /*
@@ -106,6 +122,16 @@ public class Maze{
       ans+="\n";
     }
     return ans;
+  }
+
+  public static void main(String args[]){
+    try{
+      Maze m = new Maze("data1.dat");
+      System.out.println(m);
+    }
+    catch(FileNotFoundException e){
+      System.out.println("File not Found");
+    }
   }
 
 }
