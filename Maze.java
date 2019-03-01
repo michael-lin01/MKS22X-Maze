@@ -2,11 +2,11 @@ import java.util.*;
 import java.io.*;
 public class Maze{
 
-  private char[][]maze;
+  private char[][] maze;
   private boolean animate;//false by default
   private int startR;
   private int startC;
-  private int[][] moves = new int[][] {{-1,0},{0,1},{1,0},{0,-1}};
+  private int[][] moves = {{-1,0},{0,1},{1,0},{0,-1}};
 
 
   /*Constructor loads a maze text file, and sets animate to false by default.
@@ -104,6 +104,7 @@ public class Maze{
       System.out.println(this);
       wait(50);
     }
+    //loop through moves; order: up,right,down,left
     for(int[] move:moves){
       int nextR = row+move[0];
       int nextC = col+move[1];
@@ -118,7 +119,7 @@ public class Maze{
       }
 
     }
-    return -1;
+    return -1; //no solution
   }
 
   public String toString(){
