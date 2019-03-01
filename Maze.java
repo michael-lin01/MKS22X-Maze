@@ -6,6 +6,7 @@ public class Maze{
   private boolean animate;//false by default
   private int startR;
   private int startC;
+  private int[][] moves = new int[][] {{-1,0},{0,1},{1,0},{0,-1}};
 
 
   /*Constructor loads a maze text file, and sets animate to false by default.
@@ -100,41 +101,21 @@ public class Maze{
     if(animate){
       clearTerminal();
       System.out.println(this);
-      wait(200);
+      wait(100);
     }
-    if(maze[row][col]=='E') return steps+1;
-    //up,right,down,left
-    if(maze[row-1][col]==' ') {
-      maze[row-1][col] = '@';
-      int ans = solve(row-1, col, steps++);
-      if (ans != -1) return ans;
-      else{
-        maze[row-1][col] = '.';
+    for(int[] move:moves){
+      int nextR = row+move[0];
+      int nextC = col+move[1];
+      if(maze[nextR][nextC] =='E') return steps+1;
+      if(maze[nextR][nextC] ==' ') {
+        maze[nextR][nextC] = '@';
+        int ans = solve(nextR, nextC, steps+1);
+        if (ans != -1) return ans;
+        else{
+          maze[nextR][nextC] = '.';
+        }
       }
-    }
-    if(maze[row][col+1]==' ') {
-      maze[row][col+1] = '@';
-      int ans = solve(row, col+1, steps++);
-      if (ans != -1) return ans;
-      else{
-        maze[row][col+1] = '.';
-      }
-    }
-    if(maze[row+1][col]==' ') {
-      maze[row+1][col] = '@';
-      int ans = solve(row+1, col, steps++);
-      if (ans != -1) return ans;
-      else{
-        maze[row+1][col] = '.';
-      }
-    }
-    if(maze[row][col-1]==' ') {
-      maze[row][col-1] = '@';
-      int ans = solve(row, col-1, steps++);
-      if (ans != -1) return ans;
-      else{
-        maze[row][col-1] = '.';
-      }
+
     }
     return -1;
   }
@@ -152,9 +133,9 @@ public class Maze{
 
   public static void main(String args[]){
     try{
-      Maze m = new Maze("data1.dat");
+      Maze m = new Maze(args[0]);
       m.setAnimate(true);
-      m.solve();
+      System.out.println(m.solve());
       System.out.println(m);
     }
     catch(FileNotFoundException e){
