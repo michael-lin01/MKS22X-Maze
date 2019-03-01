@@ -25,8 +25,8 @@ public class Maze{
   public Maze(String filename) throws FileNotFoundException{
     int rows = 1;
     animate = false;
-    boolean hasStart = false;
-    boolean hasEnd = false;
+    int hasStart = 0;
+    int hasEnd = 0;
 
     File text = new File(filename);
     Scanner in = new Scanner(text);
@@ -40,18 +40,19 @@ public class Maze{
     in = new Scanner(text);
     maze = new char[rows][cols];
     for(int r = 0; r < maze.length; r++){
+      if(hasStart>1||hasEnd>1) throw new IllegalStateException();
       String line = in.nextLine();
       for(int c = 0; c < line.length(); c++){
         if(line.charAt(c)=='S') {
           startR = r;
           startC = c;
-          hasStart = true;
+          hasStart++;
         }
-        if(line.charAt(c)=='E') hasEnd = true;
+        if(line.charAt(c)=='E') hasEnd++;
         maze[r][c]=line.charAt(c);
       }
     }
-    if(!hasStart || !hasEnd) throw new IllegalStateException();
+    if(hasStart!=1 || hasStart!=1) throw new IllegalStateException();
 
   }
 
@@ -101,7 +102,7 @@ public class Maze{
     if(animate){
       clearTerminal();
       System.out.println(this);
-      wait(100);
+      wait(50);
     }
     for(int[] move:moves){
       int nextR = row+move[0];
