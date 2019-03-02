@@ -80,7 +80,7 @@ public class Maze{
   */
   public int solve(){
     maze[startR][startC] = '@';
-    return solve(startR, startC, 0);
+    return solve(startR, startC);
   }
 
   /*
@@ -96,7 +96,7 @@ public class Maze{
   All visited spots that were not part of the solution are changed to '.'
   All visited spots that are part of the solution are changed to '@'
   */
-  private int solve(int row, int col, int steps){ //you can add more parameters since this is private
+  private int solve(int row, int col){ //you can add more parameters since this is private
 
     //automatic animation! You are welcome.
     if(animate){
@@ -108,11 +108,11 @@ public class Maze{
     for(int[] move:moves){
       int nextR = row+move[0];
       int nextC = col+move[1];
-      if(maze[nextR][nextC] =='E') return steps+1;
+      if(maze[nextR][nextC] =='E') return 1;
       if(maze[nextR][nextC] ==' ') {
         maze[nextR][nextC] = '@';
-        int ans = solve(nextR, nextC, steps+1);
-        if (ans != -1) return ans;
+        int ans = solve(nextR, nextC);
+        if (ans != -1) return 1+ans;
         else{
           maze[nextR][nextC] = '.';
         }
